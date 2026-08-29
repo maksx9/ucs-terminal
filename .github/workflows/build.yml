@@ -30,7 +30,7 @@ jobs:
 
       - name: Build with PyInstaller
         run: |
-          pyinstaller --onefile --name "UCS_Terminal" --windowed uart_terminal.py
+          pyinstaller --onefile --name "UCS_Terminal" --windowed --icon="assets/UCS_Terminal.ico" uart_terminal.py
 
       - name: Create ZIP artifact
         run: |
