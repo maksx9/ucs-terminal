@@ -1,0 +1,50 @@
+UART Terminal — Instrukcja instalacji na Windows
+=================================================
+
+METODA 1: Prosta (zalecana, 2 minuty)
+--------------------------------------
+
+1. Pobierz i zainstaluj Python 3 z https://www.python.org/downloads/
+   ⚠️ ZAZNACZ "Add Python to PATH" podczas instalacji!
+
+2. Otwórz PowerShell (lub CMD) i wpisz:
+   pip install pyserial
+
+3. Skopiuj plik uart_terminal.py na komputer i uruchom:
+   python uart_terminal.py
+
+---
+
+METODA 2: Automatyczna (install.bat)
+--------------------------------------
+
+1. Skopiuj pliki install.bat i uart_terminal.py do jednego folderu
+2. Kliknij dwukrotnie install.bat
+3. Skrypt automatycznie:
+   - Sprawdzi czy Python jest zainstalowany
+   - Zainstaluje pyserial
+   - Skopiuje aplikację do %USERPROFILE%\uart-terminal
+   - Utworzy skrót na pulpicie
+
+---
+
+METODA 3: Komplikacja do gotowego .exe (dla zaawansowanych)
+-------------------------------------------------------------
+
+1. Zainstaluj Python 3 i PyInstaller:
+   pip install pyinstaller pyserial
+
+2. W folderze z plikami uart_terminal.py i uart_terminal.spec wykonaj:
+   pyinstaller uart_terminal.spec
+
+3. Gotowy plik .exe znajdziesz w folderze: dist\UART Terminal.exe
+
+---
+
+WYMAGANIA WSZYSTKICH METOD:
+- Python 3.8 lub nowszy
+- tkinter (wbudowany w oficjalną instalację Python z python.org)
+
+JEŚLI MASZ PROBLEM:
+- Upewnij się, że Python jest w PATH: w PowerShell wpisz "python --version"
+- Jeśli "pip" nie działa: python -m pip install pyserial
