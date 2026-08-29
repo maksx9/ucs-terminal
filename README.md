@@ -3,13 +3,12 @@
 **UART Command Sender** — graficzny terminal do wysyłania komend UART na wybranym porcie szeregowym.
 
 ![Windows](https://img.shields.io/badge/Windows-0078D4?style=flat&logo=windows&logoColor=white)
-![Python](https://img.shields.io/badge/Python-3.12+-3776AB?style=flat&logo=python&logoColor=white)
 
 ## Pobierz
 
-📦 **[Pobierz UCS_Terminal.exe (Windows x64) →](https://github.com/maksx9/ucs-terminal/releases/download/latest/UCS_Terminal.zip)**
+📦 **[Pobierz UCS_Terminal_v2.exe (Windows x64) →](https://github.com/maksx9/ucs-terminal/releases/download/v1.0.0/UCS_Terminal_v2.zip)**
 
-Wystarczy rozpakować ZIP i uruchomić `UCS_Terminal.exe`. Bez instalacji, bez Pythona.
+Wystarczy rozpakować ZIP i uruchomić UCS_Terminal.exe. Bez instalacji, bez Pythona.
 
 ---
 
@@ -26,28 +25,22 @@ Wystarczy rozpakować ZIP i uruchomić `UCS_Terminal.exe`. Bez instalacji, bez P
 
 ## Budowanie ze źródeł
 
-### Windows
 ```bash
 pip install pyserial pyinstaller
-pyinstaller --onefile --name "UCS_Terminal" --windowed uart_terminal.py
+pyinstaller --onefile --name "UCS_Terminal" --windowed --icon=\"assets/UCS_Terminal.ico\" uart_terminal.py
 ```
-
-### Automatycznie przez GitHub Actions
-Każdy commit na `master` automatycznie buduje `.exe` — pobierz z **Actions** → **Build Windows .exe** → **Artifacts**.
 
 ---
 
 ## Plik konfiguracyjny
 
-Ustawienia i listy komend można zapisać do pliku JSON.
-
 ```json
 {
-  "port": "COM3",
-  "baudrate": 115200,
-  "commands": [
-    {"cmd": "AT\r", "label": "Test AT"},
-    {"cmd": "ATI\r", "label": "Info"}
+  \"port\": \"COM3\",
+  \"baudrate\": 115200,
+  \"commands\": [
+    {\"cmd\": \"AT\\r\", \"label\": \"Test AT\"}
   ]
 }
 ```
+
