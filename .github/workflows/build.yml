@@ -1,10 +1,12 @@
 name: Build Windows .exe
 
 on:
-  push:
-    tags:
-      - 'v*'
   workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version tag'
+        required: true
+        default: 'v2.1'
 
 jobs:
   build:
@@ -13,6 +15,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Disable Windows Defender (may improve build)
+        run: |
+          Set-MpPreference -DisableRealtimeMonitoring $true
+          Set-MpPreference -DisableIOAVProtection $true
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -28,9 +35,9 @@ jobs:
           if (Test-Path build) { Remove-Item -Recurse -Force build }
           if (Test-Path dist) { Remove-Item -Recurse -Force dist }
 
-      - name: Build with PyInstaller
+      - name: Build with PyInstaller (no UPX)
         run: |
-          pyinstaller --onefile --name "UCS_Terminal" --windowed --icon="assets/UCS_Terminal.ico" uart_terminal.py
+          pyinstaller --onefile --name "UCS_Terminal" --windowed --icon="assets/UCS_Terminal.ico" --noupx uart_terminal.py
 
       - name: Create ZIP artifact
         run: |
