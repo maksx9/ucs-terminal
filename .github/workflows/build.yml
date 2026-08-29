@@ -5,11 +5,6 @@ on:
     tags:
       - 'v*'
   workflow_dispatch:
-    inputs:
-      version:
-        description: 'Version tag (e.g. v1.0.0)'
-        required: false
-        type: string
 
 jobs:
   build:
@@ -28,15 +23,18 @@ jobs:
         run: |
           pip install pyserial pyinstaller
 
+      - name: Clean previous build
+        run: |
+          if (Test-Path build) { Remove-Item -Recurse -Force build }
+          if (Test-Path dist) { Remove-Item -Recurse -Force dist }
+
       - name: Build with PyInstaller
         run: |
-          pyinstaller --onefile --name "UCS_Terminal" --windowed --add-data ".;." uart_terminal.py
+          pyinstaller --onefile --name "UCS_Terminal" --windowed uart_terminal.py
 
       - name: Create ZIP artifact
         run: |
-          mkdir dist
-          cp dist/UCS_Terminal.exe dist/
-          Compress-Archive -Path "dist/UCS_Terminal.exe" -DestinationPath "UCS_Terminal.zip"
+          Compress-Archive -Path "dist/UCS_Terminal.exe" -DestinationPath "UCS_Terminal.zip" -Force
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -44,12 +42,3 @@ jobs:
           name: UCS_Terminal
           path: UCS_Terminal.zip
           retention-days: 30
-
-      - name: Create Release
-        if: startsWith(github.ref, 'refs/tags/')
-        uses: softprops/action-gh-release@v2
-        with:
-          files: UCS_Terminal.zip
-          draft: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
