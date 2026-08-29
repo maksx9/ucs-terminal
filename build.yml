@@ -1,0 +1,55 @@
+name: Build Windows .exe
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version tag (e.g. v1.0.0)'
+        required: false
+        type: string
+
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          pip install pyserial pyinstaller
+
+      - name: Build with PyInstaller
+        run: |
+          pyinstaller --onefile --name "UCS_Terminal" --windowed --add-data ".;." uart_terminal.py
+
+      - name: Create ZIP artifact
+        run: |
+          mkdir dist
+          cp dist/UCS_Terminal.exe dist/
+          Compress-Archive -Path "dist/UCS_Terminal.exe" -DestinationPath "UCS_Terminal.zip"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: UCS_Terminal
+          path: UCS_Terminal.zip
+          retention-days: 30
+
+      - name: Create Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: UCS_Terminal.zip
+          draft: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
